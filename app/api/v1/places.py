@@ -39,17 +39,23 @@ class PlaceList(Resource):
         # Placeholder for the logic to register (POST) a new place
         place_data = request.get_json()
         
-        if place_data.get('price', -1) < 0:
-            return {"error": "Price must be non-negative"}, 400
-        new_place = facade.create_place(place_data)
-        return jsonify(new_place), 201
+        try:
+            new_place = facade.create_place(place_data)
+            return jsonify(new_place), 201
+        except ValueError as e:
+            return {"ERROR": str(e)}, 400
 
 
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
         """Retrieve a list of all places"""
-        # Placeholder for logic to return (GET) a list of all places
-        return jsonify(place_model)
+        # Placeholder for logic to return (GET) a list of all place
+        try:
+            places = facade.get_all_places()
+            return jsonify(places), 200
+        
+        except ValueError as e:
+            return {"ERROR": str(e)}, 400
     
 
 @api.route('/<place_id>')
@@ -58,7 +64,7 @@ class PlaceResource(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get place details by ID"""
-        # Placeholder for the logic to retrieve (GET) a place by ID, including associated owner and amenities
+
         pass
 
     @api.expect(place_model)
@@ -67,9 +73,8 @@ class PlaceResource(Resource):
     @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place's information"""
-        # Placeholder for the logic to update (PUT) a place by ID
-        pass
+       
     
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)

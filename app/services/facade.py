@@ -27,7 +27,7 @@ class HBnBFacade:
         
         if place_data.get('price') < 0:
             raise ValueError("Error: Price must be a non-negative number.")
-        
+
         if not (-180 <= place_data.get('longitude', 181) <= 180):
             raise ValueError("Longitude must be between -180 and 180.")
         
@@ -86,21 +86,21 @@ class HBnBFacade:
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner": owner_data,
-            "amenities": amenities
+            "amenities": place.amenities
         }
 
     def get_all_places(self):
         """Retrieves all places."""
         places = self.place_repo.get_all()
-        return [
-            {
-                "id": place.id,
-                "title": place.title,
-                "latitutde": place.latitude,
-                "longitude": place.longitude
-            }
-            for place in places
-        ]
+        list_all_places = []
+        for place in places:
+            list_all_places.append({
+                                    "id": place.id, 
+                                    "title": place.title,
+                                    "latitutde": place.latitude,
+                                    "longitude": place.longitude
+            })
+        return list_all_places
 
     def update_place(self, place_id, place_data):
         """Update a place's information."""
