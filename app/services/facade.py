@@ -1,5 +1,5 @@
 from app.persistence.repository import InMemoryRepository
-from user import User
+from models.user import User
 
 class HBnBFacade:
     def __init__(self):
