@@ -1,7 +1,9 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask import Flask, request, jsonify
 
 api = Namespace('places', description='Place operations')
+app = Flask(__name__)
 
 # Define the models for related entities
 amenity_model = api.model('PlaceAmenity', {
@@ -27,7 +29,7 @@ place_model = api.model('Place', {
     'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
 })
 
-@api.route('/')
+@api.route('/', methods=["POST"])
 class PlaceList(Resource):
     @api.expect(place_model)
     @api.response(201, 'Place successfully created')
@@ -35,7 +37,9 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         # Placeholder for the logic to register (POST) a new place
-        pass
+        new_place = request.get_json()
+        return jsonify(new_place), 201
+
 
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
@@ -61,3 +65,7 @@ class PlaceResource(Resource):
         """Update a place's information"""
         # Placeholder for the logic to update (PUT) a place by ID
         pass
+    
+
+if __name__ == '__main__':
+	app.run(debug=True)
