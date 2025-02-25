@@ -45,7 +45,7 @@ class PlaceList(Resource):
     def get(self):
         """Retrieve a list of all places"""
         # Placeholder for logic to return (GET) a list of all places
-        pass
+        return jsonify(place_model)
     
 
 @api.route('/<place_id>')
