@@ -37,7 +37,11 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         # Placeholder for the logic to register (POST) a new place
-        new_place = request.get_json()
+        place_data = request.get_json()
+        
+        if place_data.get('price', -1) < 0:
+            return {"error": "Price must be non-negative"}, 400
+        new_place = facade.create_place(place_data)
         return jsonify(new_place), 201
 
 
