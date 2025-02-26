@@ -1,7 +1,7 @@
 from app.models.base_model import BaseModel
 
 class Place(BaseModel):
-    def __init__(self, title, description, price, latitude, longitude, owner):
+    def __init__(self, title, description, price, latitude, longitude, owner, amenities=None):
         """Initialisation for Place instances"""
         super().__init__()
         self.title = title
@@ -11,7 +11,10 @@ class Place(BaseModel):
         self.longitude = longitude
         self.owner = owner 
         self.reviews = []
-        self.amenities = []
+        if amenities is not None:
+            self.amenities = amenities
+        else:
+            self.amenities = []
 
     def add_review(self, review):
         """Adds a review to the place."""

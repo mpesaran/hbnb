@@ -40,7 +40,7 @@ class HBnBFacade:
         if not (-90 <= place_data.get('latitude') <= 90):
             raise ValueError("Latitude must be between -90 and 90.")
         
-        owner = self.get_user(place_data["owner_id"])
+        owner = self.get_user(place_data["owner"])
         if not owner:
             raise ValueError("Owner not found.")
         
@@ -50,8 +50,8 @@ class HBnBFacade:
             price=place_data["price"],
             latitude=place_data["latitude"],
             longitude=place_data["longitude"],
-            owner=place_data["owner"],
-            amenities=place_data.get["amenities", []]
+            owner=owner,
+            amenities=place_data.get("amenities", [])
         )
         self.place_repo.add(place)
         return place
@@ -62,7 +62,7 @@ class HBnBFacade:
         
         place = self.place_repo.get(place_id)
         if not place:
-            return None
+            return {"ERROR": "Place not found"}, 404
 
         owner = place.owner
         owner_data = None
@@ -73,7 +73,9 @@ class HBnBFacade:
                 "last_name": owner.last_name,
                 "email": owner.email
             }
-            
+        else:
+            return {"ERROR": "Place not found"}, 404
+        
         amenities_found_by_id = []
         for amenity_id in place.amenities:
             amenity = self.amenity_repo.get(amenity_id)
@@ -92,8 +94,9 @@ class HBnBFacade:
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner": owner_data,
-            "amenities": place.amenities
+            "amenities": formatted_amenities
         }
+
 
     def get_all_places(self):
         """Retrieves all places."""
@@ -108,6 +111,7 @@ class HBnBFacade:
             })
         return list_all_places
 
+
     def update_place(self, place_id, place_data):
         """Update a place's information."""
         place = self.place_repo.get(place_id)
@@ -117,17 +121,20 @@ class HBnBFacade:
         if "price" in place_data:
             if not isinstance(place_data["price"], (float, int)) or place_data["price"] < 0:
                 raise ValueError("ERROR: Price must be a non-negative number.")
+            place.price=place_data["price"]
 
         if "latitude" in place_data:
             if not isinstance(place_data["latitude"], (float, int)) or not (-90 <= place_data["latitude"] <= 90):
                 raise ValueError("ERROR: Latitude must be between -90 and 90.")
+            place.latitude=place_data["latitude"]
 
         if "longitude" in place_data:
             if not isinstance(place_data["longitude"], (float, int)) or not (-180 <= place_data["longitude"] <= 180):
                 raise ValueError("ERROR: Longitude must be between -180 and 180.")
+            place.longitude=place_data["longitude"]
 
         for key, value in place_data.items():
-            if hasattr(place, key):
+            if hasattr(place, key) and key not in ['price', 'latitude', 'longitude']:
                 setattr(place, key, value)
 
         return {"message": "Place updated successfully!"}

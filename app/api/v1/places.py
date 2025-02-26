@@ -3,7 +3,6 @@ from app.services import facade
 from flask import Flask, request, jsonify
 
 api = Namespace('places', description='Place operations')
-app = Flask(__name__)
 
 # Define the models for related entities
 amenity_model = api.model('PlaceAmenity', {
@@ -25,7 +24,7 @@ place_model = api.model('Place', {
     'price': fields.Float(required=True, description='Price per night'),
     'latitude': fields.Float(required=True, description='Latitude of the place'),
     'longitude': fields.Float(required=True, description='Longitude of the place'),
-    'owner_id': fields.String(required=True, description='ID of the owner'),
+    'owner': fields.String(required=True, description='ID of the owner'),
     'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
 })
 
@@ -80,13 +79,7 @@ class PlaceResource(Resource):
         """Update a place's information"""
         place_data = request.get_json()
         try:
-            facade.update_place(place_id, place_data)
-        except:
-            return {"ERROR": "Place not found"}, 404
-            # input data validation  already handled in facade.update_place method
-        
-        
-        
-
-if __name__ == '__main__':
-    app.run(debug=True)
+            response = facade.update_place(place_id, place_data)
+            return response, 200
+        except ValueError as e:
+            return {"ERROR": str(e)}, 400
