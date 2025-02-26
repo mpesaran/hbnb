@@ -38,7 +38,6 @@ class PlaceList(Resource):
         """Register a new place"""
         # Placeholder for the logic to register (POST) a new place
         place_data = request.get_json()
-        
         try:
             new_place = facade.create_place(place_data)
             return jsonify(new_place), 201
@@ -53,7 +52,6 @@ class PlaceList(Resource):
         try:
             places = facade.get_all_places()
             return jsonify(places), 200
-        
         except ValueError as e:
             return {"ERROR": str(e)}, 400
     
@@ -64,17 +62,29 @@ class PlaceResource(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get place details by ID"""
-
-        pass
-
+        # Placeholder for the logic to retrieve (GET) a place by ID, including associated owner and amenities
+        try:
+            place = facade.get_place(place_id)
+            return jsonify(place)
+        except ValueError as e:
+            return {"ERROR": str(e)}, 400 # might have to look into this one
+        
+          
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place's information"""
-       
-    
+        place_data = request.get_json()
+        try:
+            facade.update_place(place_id, place_data)
+        except:
+            return {"ERROR": "Place not found"}, 404
+            # input data validation  already handled in facade.update_place method
+        
+        
+        
 
 if __name__ == '__main__':
     app.run(debug=True)

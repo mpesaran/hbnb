@@ -25,18 +25,27 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Validates input and creates new place"""
         
+        # should put some more validation for other attributes
+        # isinstance() class to rectify appropriate data types
+        
+        if not isinstance(place_data.get('price'), float or int):
+            raise TypeError("Error: Price must be a number.")
         if place_data.get('price') < 0:
             raise ValueError("Error: Price must be a non-negative number.")
 
-        if not (-180 <= place_data.get('longitude', 181) <= 180):
+        if not isinstance(place_data.get('longitude'), float or int):
+            raise TypeError("Error: Longitude must be a number.")
+        if not (-180 <= place_data.get('longitude') <= 180):
             raise ValueError("Longitude must be between -180 and 180.")
         
-        if not (-90 <= place_data.get('latitude', 91) <= 90):
+        if not isinstance(place_data.get('latitude'), float or int):
+            raise TypeError("Error: Latitude must be a number.")
+        if not (-90 <= place_data.get('latitude') <= 90):
             raise ValueError("Latitude must be between -90 and 90.")
         
         owner = self.get_user(place_data["owner_id"])
         if not owner:
-            raise ValueError("Unknown Owner")
+            raise ValueError("Owner not found.")
         
         place = Place(
             title=place_data["title"],
