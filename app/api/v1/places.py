@@ -65,9 +65,11 @@ class PlaceResource(Resource):
         # Placeholder for the logic to retrieve (GET) a place by ID, including associated owner and amenities
         try:
             place = facade.get_place(place_id)
-            return jsonify(place)
+            if not place:
+                return {"ERROR": "Place not found"}, 404
+            return jsonify(place), 200
         except ValueError as e:
-            return {"ERROR": str(e)}, 400 # might have to look into this one
+            return {"ERROR": str(e)}, 400
         
           
     @api.expect(place_model)

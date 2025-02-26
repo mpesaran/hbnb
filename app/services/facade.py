@@ -21,24 +21,21 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute('email', email)
     
     
-    # Methods for Place
+    # ----------- PLACE methods -----------
     def create_place(self, place_data):
         """Validates input and creates new place"""
         
-        # should put some more validation for other attributes
-        # isinstance() class to rectify appropriate data types
-        
-        if not isinstance(place_data.get('price'), float or int):
+        if not isinstance(place_data.get('price'), (float, int)):
             raise TypeError("Error: Price must be a number.")
         if place_data.get('price') < 0:
             raise ValueError("Error: Price must be a non-negative number.")
 
-        if not isinstance(place_data.get('longitude'), float or int):
+        if not isinstance(place_data.get('longitude'), (float, int)):
             raise TypeError("Error: Longitude must be a number.")
         if not (-180 <= place_data.get('longitude') <= 180):
             raise ValueError("Longitude must be between -180 and 180.")
         
-        if not isinstance(place_data.get('latitude'), float or int):
+        if not isinstance(place_data.get('latitude'), (float, int)):
             raise TypeError("Error: Latitude must be a number.")
         if not (-90 <= place_data.get('latitude') <= 90):
             raise ValueError("Latitude must be between -90 and 90.")
@@ -53,8 +50,8 @@ class HBnBFacade:
             price=place_data["price"],
             latitude=place_data["latitude"],
             longitude=place_data["longitude"],
-            owner_id=place_data["owner_id"],
-            amenities=place_data["amenities"]
+            owner=place_data["owner"],
+            amenities=place_data.get["amenities", []]
         )
         self.place_repo.add(place)
         return place
@@ -67,7 +64,7 @@ class HBnBFacade:
         if not place:
             return None
 
-        owner = self.get_user(place.owner_id)
+        owner = place.owner
         owner_data = None
         if owner:
             owner_data = {
@@ -106,7 +103,7 @@ class HBnBFacade:
             list_all_places.append({
                                     "id": place.id, 
                                     "title": place.title,
-                                    "latitutde": place.latitude,
+                                    "latitude": place.latitude,
                                     "longitude": place.longitude
             })
         return list_all_places
@@ -117,16 +114,21 @@ class HBnBFacade:
         if not place:
             raise ValueError("Place not found.")
 
+        if "price" in place_data:
+            if not isinstance(place_data["price"], (float, int)) or place_data["price"] < 0:
+                raise ValueError("ERROR: Price must be a non-negative number.")
+
+        if "latitude" in place_data:
+            if not isinstance(place_data["latitude"], (float, int)) or not (-90 <= place_data["latitude"] <= 90):
+                raise ValueError("ERROR: Latitude must be between -90 and 90.")
+
+        if "longitude" in place_data:
+            if not isinstance(place_data["longitude"], (float, int)) or not (-180 <= place_data["longitude"] <= 180):
+                raise ValueError("ERROR: Longitude must be between -180 and 180.")
+
         for key, value in place_data.items():
             if hasattr(place, key):
                 setattr(place, key, value)
-
-        if place.price < 0:
-            raise ValueError("Price must be a non-negative number.")
-        if not (-90 <= place.latitude <= 90):
-            raise ValueError("Latitude must be between -90 and 90.")
-        if not (-180 <= place.longitude <= 180):
-            raise ValueError("Longitude must be between -180 and 180.")
 
         return {"message": "Place updated successfully!"}
     

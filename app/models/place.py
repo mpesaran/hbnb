@@ -53,10 +53,9 @@ class Place(BaseModel):
     @price.setter
     def price(self, value):
         """Setter for price attribute"""
-        if value >= 0 and value.isdigit():
-            self._price = value
-        else:
-            return "Error: Price must be a non-negative number"
+        if value <= 0 or not isinstance(value, (int, float)):
+            raise ValueError("ERROR: Price must be a non-negative number.")
+        self._price = value
         
     
     @property
@@ -67,10 +66,10 @@ class Place(BaseModel):
     @latitude.setter
     def latitude(self, value):
         """Setter for latitude attribute"""
-        if not value.isdigit():
+        if not isinstance(value, (int, float)):
             raise TypeError("ERROR: Latitude must be a number")
-        if not -180 >= value <= 180:
-            raise ValueError("ERROR: Latitude must be between -180 and 180")
+        if not (-90 <= value <= 90):
+            raise ValueError("ERROR: Latitude must be between -90 and 90")
         self._latitude = value
     
     @property
@@ -81,9 +80,9 @@ class Place(BaseModel):
     @longitude.setter
     def longitude(self, value):
         """Setter for longitude attribute"""
-        if not value.isdigit():
+        if not isinstance(value, (int, float)):
             raise TypeError("ERROR: Longitude must be a number")
-        if not -180 >= value <= 180:
+        if not (-180 <= value <= 180):
             raise ValueError("ERROR: Longitude must be between -180 and 180")
         self._longitude = value
         
@@ -94,6 +93,13 @@ class Place(BaseModel):
         return self._owner
     
     @owner.setter
-    def description(self, value):
+    def owner(self, value):
         """Setter for owner attribute"""
         self._owner = value  
+    
+    # adding a ownerID property derived from owner object
+    @property
+    def owner_id(self):
+        if self._owner:
+            return self.owner.id
+        return None
