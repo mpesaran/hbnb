@@ -28,7 +28,7 @@ place_model = api.model('Place', {
     'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
 })
 
-@api.route('/', methods=["POST"])
+@api.route('/')
 class PlaceList(Resource):
     @api.expect(place_model)
     @api.response(201, 'Place successfully created')
@@ -80,6 +80,6 @@ class PlaceResource(Resource):
         place_data = request.get_json()
         try:
             response = facade.update_place(place_id, place_data)
-            return response, 200
+            return jsonify(response), 200
         except ValueError as e:
             return {"ERROR": str(e)}, 400
