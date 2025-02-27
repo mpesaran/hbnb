@@ -1,5 +1,6 @@
 from app.persistence.repository import InMemoryRepository
 from app.models.user import User
+from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
