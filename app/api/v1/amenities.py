@@ -17,7 +17,9 @@ class AmenityList(Resource):
         """Register a new amenity"""
         amenity_data = api.payload
         # Placeholder for the logic to register a new amenity
-        existing_amenity = facade.get_amenity(amenity_data['id'])
+        all_amenities = facade.get_all_amenities()
+        existing_amenity = any(a.name == amenity_data["name"] for a in all_amenities)
+
         if existing_amenity:
             return {'error': 'Amenity already exists'}, 400
 
@@ -39,7 +41,7 @@ class AmenityResource(Resource):
     @api.response(404, 'Amenity not found')
     def get(self, amenity_id):
         """Get amenity details by ID"""
-        amenity = facade.get(amenity_id)
+        amenity = facade.get_amenity(amenity_id)
         # Placeholder for the logic to retrieve an amenity by ID
         if not amenity:
             return {'error': 'Amenitiy not found'}, 404
@@ -52,13 +54,16 @@ class AmenityResource(Resource):
     def put(self, amenity_id):
         """Update an amenity's information"""
         amenity_data = api.payload
-        amenity = facade.get_amenity(amenity_id)
-
         # Placeholder for the logic to update an amenity by ID
         if not amenity_data:
             return {'error': 'Invalid input data'}, 400
-        if not amenity:
+        
+        amenity_exists = facade.get_amenity(amenity_id)
+        if not amenity_exists:
             return {'error': 'Amenity not found'}, 404
         
-        updated_amenity = facade.update_amenity(amenity_id, amenity_data)        
-        return {'id': updated_amenity.id, 'name': updated_amenity.name}, 200 
+        try:
+            facade.update_amenity(amenity_id, amenity_data)
+            return {"message": "Amenity updated successfully"}, 200 
+        except ValueError as e:
+            return {"error": "Failed to update amenity"}, 500 

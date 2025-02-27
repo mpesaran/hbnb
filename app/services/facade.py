@@ -42,8 +42,9 @@ class HBnBFacade:
     # Methods for Ammenties
     def create_amenity(self, amenity_data):
         # Placeholder for logic to create an amenity
-        amenity = Amenity(amenity_data)
-        return self.amenity_repo.add(amenity)
+        amenity = Amenity(**amenity_data)
+        self.amenity_repo.add(amenity)
+        return amenity
 
     def get_amenity(self, amenity_id):
         # Placeholder for logic to retrieve an amenity by ID
