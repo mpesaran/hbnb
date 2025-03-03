@@ -59,7 +59,6 @@ class HBnBFacade:
 
     def get_place(self, place_id):
         """"Retrieve a place using ID, owner and amenities"""
-        
         place = self.place_repo.get(place_id)
         if not place:
             return {"ERROR": "Place not found"}, 404
