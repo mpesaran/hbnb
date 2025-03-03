@@ -39,7 +39,7 @@ class PlaceList(Resource):
         place_data = request.get_json()
         try:
             new_place = facade.create_place(place_data)
-            return jsonify(new_place), 201
+            return new_place, 201
         except ValueError as e:
             return {"ERROR": str(e)}, 400
 
@@ -50,7 +50,7 @@ class PlaceList(Resource):
         # Placeholder for logic to return (GET) a list of all place
         try:
             places = facade.get_all_places()
-            return jsonify(places), 200
+            return places, 200
         except ValueError as e:
             return {"ERROR": str(e)}, 400
     
@@ -66,7 +66,7 @@ class PlaceResource(Resource):
             place = facade.get_place(place_id)
             if not place:
                 return {"ERROR": "Place not found"}, 404
-            return jsonify(place), 200
+            return place, 200
         except ValueError as e:
             return {"ERROR": str(e)}, 400
         
@@ -80,6 +80,6 @@ class PlaceResource(Resource):
         place_data = request.get_json()
         try:
             response = facade.update_place(place_id, place_data)
-            return jsonify(response), 200
+            return response, 200
         except ValueError as e:
             return {"ERROR": str(e)}, 400

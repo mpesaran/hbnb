@@ -34,7 +34,10 @@ class Place(BaseModel):
     @title.setter
     def title(self, value):
         """Setter for title attribute"""
-        self._title = value
+        if value != None:
+            self._title = value
+        else:
+            raise TypeError("ERROR: Title must not be empty")
         
 
     @property
