@@ -1,6 +1,7 @@
 from uuid import uuid4
 from app.persistence.repository import InMemoryRepository
 from app.models.user import User
+from app.models.amenity import Amenity
 from app.models.review import Review
 from app.models.place import Place
 
@@ -140,7 +141,7 @@ class HBnBFacade:
 
 
     def update_place(self, place_id, place_data):
-       """Update a place's information."""
+      """Update a place's information."""
         place = self.place_repo.get(place_id)
         if not place:
             return {"ERROR": "Place not found."}, 400
@@ -166,6 +167,29 @@ class HBnBFacade:
                 setattr(place, key, value)
 
         return {"message": "Place updated successfully!"}
+      
+      
+    
+
+    # - - - AMENITIES methods - - - 
+    def create_amenity(self, amenity_data):
+        # Placeholder for logic to create an amenity
+        amenity = Amenity(**amenity_data)
+        self.amenity_repo.add(amenity)
+        return amenity
+
+    def get_amenity(self, amenity_id):
+        # Placeholder for logic to retrieve an amenity by ID
+        return self.amenity_repo.get(amenity_id)
+
+    def get_all_amenities(self):
+        # Placeholder for logic to retrieve all amenities
+        return self.amenity_repo.get_all()
+
+    def update_amenity(self, amenity_id, amenity_data):
+        # Placeholder for logic to update an amenity
+        return self.amenity_repo.update(amenity_id, amenity_data)
+       
    
   
   
@@ -218,3 +242,4 @@ class HBnBFacade:
     def delete_review(self, review_id):
         """Delete review"""
         return self.review_repo.delete(review_id)
+
