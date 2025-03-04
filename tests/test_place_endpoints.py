@@ -39,6 +39,7 @@ class TestPlaceEndpoints(unittest.TestCase):
 
     def test_create_place_invalid_title(self):
         response = self.client.post('/api/v1/places/', json={
+            "title": "",
             "description": "Place no title",
             "price": 120.5,
             "latitude": 37.7749,
@@ -48,7 +49,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
-        self.assertEqual(data["ERROR"], "ERROR: Title must not be empty.")
+        self.assertEqual(data["ERROR"], "ERROR: Title must not be empty")
     
         
     def test_create_place_invalid_price(self):

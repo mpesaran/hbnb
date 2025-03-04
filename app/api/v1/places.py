@@ -37,6 +37,10 @@ class PlaceList(Resource):
         """Register a new place"""
         # Placeholder for the logic to register (POST) a new place
         place_data = request.get_json()
+        
+        if place_data.get('title') is None:
+            raise ValueError("ERROR: Title must not be empty")
+        
         try:
             new_place = facade.create_place(place_data)
             return new_place, 201
@@ -74,9 +78,15 @@ class PlaceResource(Resource):
     @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place's information"""
-
         # Placeholder for the logic to update (PUT) a place by ID
-        #pass
+        place_data = request.get_json()
+        try:
+            response = facade.update_place(place_id, place_data)
+            return response, 200
+        except ValueError as e:
+            return {"ERROR": str(e)}, 400
+
+
 
     # Adding the review model
 # review_model = api.model('PlaceReview', {
@@ -98,10 +108,5 @@ class PlaceResource(Resource):
 #     'reviews': fields.List(fields.Nested(review_model), description='List of reviews')
 # })
 # =======
-#         place_data = request.get_json()
-#         try:
-#             response = facade.update_place(place_id, place_data)
-#             return response, 200
-#         except ValueError as e:
-#             return {"ERROR": str(e)}, 400
+
 # >>>>>>> main

@@ -25,7 +25,7 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
       
-        def get_all_users(self):
+    def get_all_users(self):
         """Retrieve all users from the repository."""
         return self.user_repo.get_all()
 
@@ -50,8 +50,8 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Validates input and creates new place"""
         
-        if place_data.get('title') is None:
-            raise TypeError("ERROR: Title must not be empty")
+        if place_data.get('title') is None or place_data.get('title') == "":
+            raise ValueError("ERROR: Title must not be empty")
         
         if not isinstance(place_data.get('price'), (float, int)):
             raise TypeError("ERROR: Price must be a non-negative number.")
@@ -142,7 +142,7 @@ class HBnBFacade:
 
 
     def update_place(self, place_id, place_data):
-      """Update a place's information."""
+        """Update a place's information."""
         place = self.place_repo.get(place_id)
         if not place:
             return {"ERROR": "Place not found."}, 400
