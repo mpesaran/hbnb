@@ -38,6 +38,7 @@ HBnB is a web application that replicates the functionality of Airbnb, allowing 
     - **`__init__.py`**: Initializes the persistence package.
     - **repository.py**: Contains the repository implementation.
 
+
 - **run.py**: Entry point for running the Flask application.
   
 - **config.py**: Configures environment variables and application settings.
