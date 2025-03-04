@@ -1,4 +1,4 @@
-![H(olberton)BnB](https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Fkeysmusician%2FHbnb&psig=AOvVaw0uk01Jr1BT-Bfk-41coJSa&ust=1741162602930000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLj5kKf-74sDFQAAAAAdAAAAABAE)
+![H(olberton)BnB](https://imgur.com/a/13cf04R)
 # HBnB
 HBnB is a web application that replicates the functionality of Airbnb, allowing users to manage and book various accommodations. This project is built using Flask and follows RESTful API principles.
 
