@@ -12,7 +12,8 @@ HBnB is a web application that replicates the functionality of Airbnb, allowing 
 
 ### Directories and Files:
 
-- **==app/==**: Contains the core application code.
+### **app/**:
+- Contains the core application code.
   - **`__init__.py`**: Initializes the application package.
   
   - **api/**: Houses the API endpoints, organized by version (v1/).
