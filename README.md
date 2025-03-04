@@ -47,7 +47,8 @@ HBnB is a web application that replicates the functionality of Airbnb, allowing 
   
 - **README.md**: This file contains a brief overview of the project and instructions.
 
-## 🖥️  Installation
+
+## 🖥️  Installation  🖥️
 
 To install the necessary dependencies, run:
 
@@ -56,6 +57,8 @@ pip install -r requirements.txt
 python run.py
 
 ```
+
+
 ## 🏭  API Endpoints  🏭
 
 ### 👥  User Routes 
@@ -87,6 +90,7 @@ python run.py
 - `GET /api/v1/amenities/` - Retrieve a list of all amenities
 - `GET /api/v1/amenities/<amenity_id>` - Get amenity details by ID.
 - `PUT /api/v1/amenities/<amenity_id>` - Update an amenity's information.
+
 
 ## 🧪  Running Tests  🧪
 
