@@ -16,4 +16,7 @@ class BaseModel:
         for key, value in data.items():
             if hasattr(self, key):
                 setattr(self, key, value)
+             
         self.save()  
+
+

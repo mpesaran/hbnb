@@ -10,4 +10,5 @@ class DevelopmentConfig(Config):
 config = {
     'development': DevelopmentConfig,
     'default': DevelopmentConfig
+    # "TESTING": True
 }
