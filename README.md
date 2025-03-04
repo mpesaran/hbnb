@@ -1,5 +1,5 @@
 # HBnB
-hbnb is a web application that replicates the functionality of Airbnb, allowing users to manage and book various accommodations. This project is built using Flask and follows RESTful API principles.
+HBnB is a web application that replicates the functionality of Airbnb, allowing users to manage and book various accommodations. This project is built using Flask and follows RESTful API principles.
 
 ## Features
 
@@ -66,16 +66,25 @@ python run.py
 ### Place Routes
 
 - `POST /api/v1/places/` - Create a new place
-
+- `GET /api/v1/places/` - Return a list of all places.
+- `GET /api/v1/places/<place_id>` - Retrieve details of a specific place, including its associated owner and amenities.
+- `PUT /api/v1/places/<place_id>` - Update place information.
 
 ### Review Routes
 
 - `POST /api/v1/reviews/` - Create a new review
-
+- `GET /api/v1/reviews/` - Return a list of all reviews.
+- `GET /api/v1/reviews/<review_id>` - Retrieve details of a specific review.
+- `GET /api/v1/places/<place_id>/reviews` - Retrieve all reviews for a specific place.
+- `PUT /api/v1/reviews/<review_id>` - Update a review’s information.
+- `DELETE /api/v1/reviews/<review_id>` - Delete a review.
 
 ### Amenity Routes
 
 - `POST /api/v1/amenities/` - Create a new amenity
+- `GET /api/v1/amenities/` - Retrieve a list of all amenities
+- `GET /api/v1/amenities/<amenity_id>` - Get amenity details by ID.
+- `PUT /api/v1/amenities/<amenity_id>` - Update an amenity's information.
 
 ## Running Tests
 
@@ -83,6 +92,11 @@ To run the tests, use the following command:
  ```bash
  pytest filename
  ```
+
+Alternatively, use this command:
+```bash
+python3 -m unittest tests.test_<entity_name>_endpoints
+```
 
 ## Contributors
 - [Anna Ly](https://github.com/aavly)
