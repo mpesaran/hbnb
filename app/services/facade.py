@@ -7,7 +7,8 @@ class HBnBFacade:
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
-
+    
+    # ----------- USER methods -----------
     def create_user(self, user_data):
         user = User(**user_data)
         self.user_repo.add(user)
@@ -18,22 +19,23 @@ class HBnBFacade:
 
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
-    
-    
-    # Methods for Place
-    def create_place(self, place_data):
-        # Placeholder for logic to create a place, including validation for price, latitude, and longitude
-        pass
 
-    def get_place(self, place_id):
-        # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
-        pass
+    def get_all_users(self):
+        """Retrieve all users from the repository."""
+        return self.user_repo.get_all()
 
-    def get_all_places(self):
-        # Placeholder for logic to retrieve all places
-        pass
+    def update_user(self, user_id, update_data):
+        """Update an existing user's details."""
+        self.user_repo.update(user_id, update_data)
+        user =  self.get_user(user_id)
+        if not user:
+            return None
 
-    def update_place(self, place_id, place_data):
-        # Placeholder for logic to update a place
-        pass
-    
+        # Validate that email is unique if it's being updated
+        if 'email' in update_data:
+            existing_user = self.get_user_by_email(update_data['email'])
+            if existing_user and existing_user.id != user_id:
+                raise ValueError("Email already registered")
+
+        user.update(update_data)
+        return user
