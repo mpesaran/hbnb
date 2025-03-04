@@ -2,7 +2,7 @@
 # HBnB
 HBnB is a web application that replicates the functionality of Airbnb, allowing users to manage and book various accommodations. This project is built using Flask and follows RESTful API principles.
 
-## 🌀  Features
+## 🌀  Features  🌀
 
 - User registration and authentication
 - Create, retrieve, update, and delete users
@@ -10,7 +10,7 @@ HBnB is a web application that replicates the functionality of Airbnb, allowing 
 - Input validation and error handling
 - Well-documented API using Flask-RESTx
 
-### 🗃️  Directories and Files:
+### 🗃️  Directories and Files:  🗃️
 
 - **app/**: Contains the core application code.
   - **`__init__.py`**: Initializes the application package.
@@ -56,7 +56,7 @@ pip install -r requirements.txt
 python run.py
 
 ```
-## 🏭  API Endpoints
+## 🏭  API Endpoints  🏭
 
 ### 👥  User Routes 
 
@@ -88,7 +88,7 @@ python run.py
 - `GET /api/v1/amenities/<amenity_id>` - Get amenity details by ID.
 - `PUT /api/v1/amenities/<amenity_id>` - Update an amenity's information.
 
-## 🧪  Running Tests
+## 🧪  Running Tests  🧪
 
 To run the tests, use the following command:
  ```bash
