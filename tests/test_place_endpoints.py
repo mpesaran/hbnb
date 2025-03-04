@@ -78,7 +78,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
-        self.assertEqual(data["ERROR"], "Latitude must be between -90 and 90.")
+        self.assertEqual("Latitude must be between -90 and 90.")
 
 
     def test_create_place_invalid_longitude(self):
@@ -135,7 +135,7 @@ class TestPlaceEndpoints(unittest.TestCase):
             "price": 120.00,
             "latitude": 33.333,
             "longitude": -122.2222,
-            "owner": "user123",
+            "ownear": "user123",
             "amenities": ["amenity1", "amenity2"]
         })
         place_id = response.get_json()["id"]
@@ -159,7 +159,7 @@ class TestPlaceEndpoints(unittest.TestCase):
             "owner": "user123",
             "amenities": ["amenity1", "amenity2"]
         })
-        place_id = response.get_json()["id"]
+        place_id = response.get_json()["id"] # maybe convert to integer 
         
 
         response = self.client.put(f'/api/v1/places/{place_id}', json={

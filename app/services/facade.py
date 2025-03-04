@@ -25,23 +25,23 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Validates input and creates new place"""
         
-        if not place_data.get('title'):
-            return {"ERROR": "Title is required."}, 400
+        if place_data.get('title') is not None:
+            raise TypeError("ERROR: Title must not be empty")
         
         if not isinstance(place_data.get('price'), (float, int)):
-            return {"ERROR": "Error: Price must be a number."}, 400
+            raise TypeError("ERROR: Price must be a non-negative number.")
         if place_data.get('price') < 0:
-            return {"ERROR": "Error: Price must be a non-negative number."}, 400
+            raise ValueError("ERROR: Price must be a non-negative number.")
 
         if not isinstance(place_data.get('longitude'), (float, int)):
-            return {"ERROR": "Error: Longitude must be a number."}, 400
+            raise TypeError("ERROR: Longitude must be a number")
         if not (-180 <= place_data.get('longitude') <= 180):
-            return {"ERROR": "Longitude must be between -180 and 180."}, 400
+            raise ValueError("ERROR: Longitude must be between -180 and 180")
         
-        if not isinstance(place_data.get('latitude'), (float, int)):
-            return {"ERROR": "Error: Latitude must be a number."}, 400
+        if not isinstance(place_data.get('latitude'), (int, float)):
+            raise TypeError("ERROR: Latitude must be a number")
         if not (-90 <= place_data.get('latitude') <= 90):
-            return {"ERROR": "Latitude must be between -90 and 90."}, 400
+            raise ValueError("ERROR: Latitude must be between -90 and 90")
         
         owner_found = self.get_user(place_data["owner"])
         if not owner_found:

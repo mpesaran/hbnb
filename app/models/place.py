@@ -4,11 +4,31 @@ class Place(BaseModel):
     def __init__(self, title, description, price, latitude, longitude, owner, amenities=None):
         """Initialisation for Place instances"""
         super().__init__()
+        
+        if title is not None:
+            self._title = title
+        else:
+            raise TypeError("ERROR: Title must not be empty")
         self.title = title
+        
         self.description = description
+        
+        if price <= 0 or not isinstance(price, (int, float)):
+            raise ValueError("ERROR: Price must be a non-negative number.")
         self.price = price 
-        self.latitude = latitude 
-        self.longitude = longitude
+        
+        if not isinstance(latitude, (int, float)):
+            raise TypeError("ERROR: Latitude must be a number")
+        if not (-90 <= latitude <= 90):
+            raise ValueError("ERROR: Latitude must be between -90 and 90")
+        self._latitude = latitude
+        
+        if not isinstance(longitude, (int, float)):
+            raise TypeError("ERROR: Longitude must be a number")
+        if not (-180 <= longitude <= 180):
+            raise ValueError("ERROR: Longitude must be between -180 and 180")
+        self._longitude = longitude
+        
         self.owner = owner 
         self.reviews = []
         if amenities is not None:
