@@ -8,4 +8,15 @@ class Review(BaseModel):
 		self.rating = rating
 		self.place = place
 		self.user = user
-  
+
+	def to_dict(self):
+		"""Convert Review object to dictionary for API response"""
+		return {
+			"id": self.id,
+			"text": self.text,
+			"rating": self.rating,
+			"place_id": self.place.id if self.place else None,
+			"user_id": self.user.id if self.user else None,
+			"created_at": self.created_at.isoformat(),
+			"updated_at": self.updated_at.isoformat(),
+		}
