@@ -24,7 +24,7 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
       
-        def get_all_users(self):
+    def get_all_users(self):
         """Retrieve all users from the repository."""
         return self.user_repo.get_all()
 
@@ -140,7 +140,7 @@ class HBnBFacade:
 
 
     def update_place(self, place_id, place_data):
-       """Update a place's information."""
+        """Update a place's information."""
         place = self.place_repo.get(place_id)
         if not place:
             return {"ERROR": "Place not found."}, 400
@@ -182,11 +182,10 @@ class HBnBFacade:
         if not (1 <= review_data['rating'] <= 5):
             raise ValueError("Rating must be between 1 and 5")
         review = Review(
-            id=str(uuid4()),
             text=review_data['text'],
             rating=review_data['rating'],
-            user_id=review_data['user_id'],
-            place_id=review_data['place_id']
+            user=user,
+            place=place
         )
         self.review_repo.add(review)
         return review
