@@ -4,13 +4,10 @@ class Place(BaseModel):
     def __init__(self, title, description, price, latitude, longitude, owner, amenities=None):
         """Initialisation for Place instances"""
         super().__init__()
-        
         if title is not None:
             self._title = title
         else:
             raise TypeError("ERROR: Title must not be empty")
-        self.title = title
-        
         self.description = description
         
         if price <= 0 or not isinstance(price, (int, float)):
@@ -57,7 +54,7 @@ class Place(BaseModel):
         if value != None:
             self._title = value
         else:
-            raise TypeError("ERROR: Title must not be empty")
+            raise TypeError("Title must not be empty")
         
 
     @property

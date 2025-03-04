@@ -26,7 +26,7 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Validates input and creates new place"""
         
-        if place_data.get('title') is not None:
+        if place_data.get('title') is None:
             raise TypeError("ERROR: Title must not be empty")
         
         if not isinstance(place_data.get('price'), (float, int)):
@@ -64,13 +64,14 @@ class HBnBFacade:
     def get_place(self, place_id):
         """"Retrieve a place using ID, owner and amenities"""
         place = self.place_repo.get(place_id)
+        
         if place is None:
-            return {"ERROR": "Place not found"}, 404
+            return None
 
         owner = place.owner
         owner_data = None
         if owner is None:
-            return {"ERROR": "Owner not found"}, 404
+            return None
         
         owner_data = {
             "id": owner.id,
@@ -99,7 +100,7 @@ class HBnBFacade:
             "longitude": place.longitude,
             "owner": owner_data,
             "amenities": formatted_amenities
-        }
+        }, 200
 
 
     def get_all_places(self):
