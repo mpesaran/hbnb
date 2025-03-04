@@ -26,7 +26,7 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute('email', email)
       
         def get_all_users(self):
-        """Retrieve all users from the repository."""
+            """Retrieve all users from the repository."""
         return self.user_repo.get_all()
 
     def update_user(self, user_id, update_data):
@@ -141,7 +141,7 @@ class HBnBFacade:
 
 
     def update_place(self, place_id, place_data):
-      """Update a place's information."""
+        """Update a place's information."""
         place = self.place_repo.get(place_id)
         if not place:
             return {"ERROR": "Place not found."}, 400

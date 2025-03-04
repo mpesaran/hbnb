@@ -8,6 +8,13 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity'),
 })
 
+def validate_amenity(self):
+    if not isinstance(self['name'], str) or not self['name'].strip():
+        raise ValueError("Amenity name must be a non-empty string")
+    
+    self['name'] = self['name'].strip()
+    return self
+
 @api.route('/')
 class AmenityList(Resource):
     @api.expect(amenity_model)
@@ -22,9 +29,14 @@ class AmenityList(Resource):
 
         if existing_amenity:
             return {'error': 'Amenity already exists'}, 400
+        
+        try:
+            amenity_validated = validate_amenity(amenity_data)
+            new_amenity = facade.create_amenity(amenity_validated)
 
-        new_amenity = facade.create_amenity(amenity_data)
-        return {'id': new_amenity.id, 'name': new_amenity.name}, 201
+            return {'id': new_amenity.id, 'name': new_amenity.name}, 201
+        except ValueError as e:
+            return {"error": str(e)}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
     def get(self):
