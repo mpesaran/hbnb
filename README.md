@@ -2,7 +2,7 @@
 # HBnB
 HBnB is a web application that replicates the functionality of Airbnb, allowing users to manage and book various accommodations. This project is built using Flask and follows RESTful API principles.
 
-## Features
+## 🌀  Features
 
 - User registration and authentication
 - Create, retrieve, update, and delete users
@@ -10,7 +10,7 @@ HBnB is a web application that replicates the functionality of Airbnb, allowing 
 - Input validation and error handling
 - Well-documented API using Flask-RESTx
 
-### 📁 Directories and Files:
+### 🗃️  Directories and Files:
 
 - **app/**: Contains the core application code.
   - **`__init__.py`**: Initializes the application package.
@@ -47,7 +47,7 @@ HBnB is a web application that replicates the functionality of Airbnb, allowing 
   
 - **README.md**: This file contains a brief overview of the project and instructions.
 
-## 🖥️ Installation
+## 🖥️  Installation
 
 To install the necessary dependencies, run:
 
@@ -56,23 +56,23 @@ pip install -r requirements.txt
 python run.py
 
 ```
-## 🏭 API Endpoints
+## 🏭  API Endpoints
 
-### User Routes 👥
+### 👥  User Routes 
 
 - `POST /api/v1/users/` - Register a new user
 - `GET /api/v1/users/` - Retrieve a list of users
 - `GET /api/v1/users/<user_id>` - Get user details by ID
 - `PUT /api/v1/users/<user_id>` - Update user details
 
-### Place Routes 🏘️
+### 🏘️  Place Routes 
 
 - `POST /api/v1/places/` - Create a new place
 - `GET /api/v1/places/` - Return a list of all places.
 - `GET /api/v1/places/<place_id>` - Retrieve details of a specific place, including its associated owner and amenities.
 - `PUT /api/v1/places/<place_id>` - Update place information.
 
-### Review Routes 🗒️
+### 🗒️  Review Routes 
 
 - `POST /api/v1/reviews/` - Create a new review
 - `GET /api/v1/reviews/` - Return a list of all reviews.
@@ -81,14 +81,14 @@ python run.py
 - `PUT /api/v1/reviews/<review_id>` - Update a review’s information.
 - `DELETE /api/v1/reviews/<review_id>` - Delete a review.
 
-### Amenity Routes 🚽
+### 🚽  Amenity Routes 
 
 - `POST /api/v1/amenities/` - Create a new amenity
 - `GET /api/v1/amenities/` - Retrieve a list of all amenities
 - `GET /api/v1/amenities/<amenity_id>` - Get amenity details by ID.
 - `PUT /api/v1/amenities/<amenity_id>` - Update an amenity's information.
 
-## Running Tests
+## 🧪  Running Tests
 
 To run the tests, use the following command:
  ```bash
