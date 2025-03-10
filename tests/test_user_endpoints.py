@@ -3,19 +3,45 @@ import os
 import pytest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from app import create_app
+from app.services.facade import HBnBFacade
 
 # sys.path.append("..")
-# @pytest.fixture()
-# def app():
-#     """Creates a single app instance for all tests in the session."""
-#     app = create_app()
-    
-#     return app 
-
-@pytest.fixture
-def client():
-    """A test client for the app."""
+@pytest.fixture(scope="session")
+def app():
+    """Creates a single app instance for all tests in the session."""
     app = create_app()
+    
+    return app
+
+@pytest.fixture(autouse=True)
+def reset_facade_repositories(monkeypatch):
+    """Intercepts HBnBFacade creation and clears its repositories after each test."""
+    created_facades = []
+
+    original_init = HBnBFacade.__init__
+
+    def new_init(self, *args, **kwargs):
+        original_init(self, *args, **kwargs)
+        created_facades.append(self)
+
+    monkeypatch.setattr(HBnBFacade, "__init__", new_init)
+
+    yield
+
+    # After each test, clear repositories of all created façade instances.
+    for facade in created_facades:
+        facade.user_repo.clear()
+        facade.place_repo.clear()
+        facade.review_repo.clear()
+        facade.amenity_repo.clear()
+
+    # Clean up the list for the next test.
+    created_facades.clear()
+
+@pytest.fixture(scope="function")
+def client(app):
+    """A test client for the app."""
+    # app = create_app()
     with app.test_client() as client:
         yield client
 
@@ -106,12 +132,12 @@ class TestUserEndpoints:
         existing_email_user = {
             "first_name": "Jane",
             "last_name": "Doe",
-            "email": created_user["email"]  # Use the same email as the existing user
+            "email": created_user["email"]
         }
 
         response = client.post('/api/v1/users/', json=existing_email_user)
-        assert response.status_code == 400  # Ensure user creation fails
-        assert 'error' in response.json  # Ensure error message is present
+        assert response.status_code == 400  # user creation fails
+        assert 'error' in response.json  # error message is present
         assert response.json['error'] == 'Email already registered'
 
     def test_update_user_with_invalid_email(self, client, created_user):
