@@ -26,7 +26,7 @@ class HBnBFacade:
         return self.user_repo.get_by_attribute('email', email)
       
         def get_all_users(self):
-        """Retrieve all users from the repository."""
+            """Retrieve all users from the repository."""
         return self.user_repo.get_all()
 
     def update_user(self, user_id, update_data):
@@ -142,7 +142,7 @@ class HBnBFacade:
 
 
     def update_place(self, place_id, place_data):
-      """Update a place's information."""
+        """Update a place's information."""
         place = self.place_repo.get(place_id)
         if not place:
             return {"ERROR": "Place not found."}, 400
@@ -181,16 +181,31 @@ class HBnBFacade:
 
     def get_amenity(self, amenity_id):
         # Placeholder for logic to retrieve an amenity by ID
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+          return None
+          
         return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
         # Placeholder for logic to retrieve all amenities
         return self.amenity_repo.get_all()
-
+    
     def update_amenity(self, amenity_id, amenity_data):
         # Placeholder for logic to update an amenity
-        return self.amenity_repo.update(amenity_id, amenity_data)
-       
+        amenity = self.get_amenity(amenity_id)
+        if not amenity:
+          return None 
+
+        all_amenities = self.get_all_amenities()
+        existing_amenity = any(a.name == amenity_data["name"] for a in all_amenities)
+
+        if 'name' in amenity_data and amenity_data['name'] != amenity.name:
+          if existing_amenity and existing_amenity.id != amenity_id:
+            raise ValueError("Amenity name already exists")
+        
+        self.amenity_repo.update(amenity_id, amenity_data)
+        return self.get_amenity(amenity_id)
    
   
   
