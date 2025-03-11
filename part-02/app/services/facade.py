@@ -1,4 +1,3 @@
-from uuid import uuid4
 from app.persistence.repository import InMemoryRepository
 from app.models.user import User
 from app.models.amenity import Amenity
@@ -24,9 +23,9 @@ class HBnBFacade:
 
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
-      
-        def get_all_users(self):
-            """Retrieve all users from the repository."""
+ 
+    def get_all_users(self):
+        """Retrieve all users from the repository."""
         return self.user_repo.get_all()
 
     def update_user(self, user_id, update_data):
@@ -44,7 +43,7 @@ class HBnBFacade:
 
         user.update(update_data)
         return user
-    
+
     
     # ----------- PLACE methods -----------
     def create_place(self, place_data):
@@ -78,7 +77,7 @@ class HBnBFacade:
             price=place_data["price"],
             latitude=place_data["latitude"],
             longitude=place_data["longitude"],
-            owner=owner_found,
+            owner=owner_found.id, # we have to pass user's id not whole object
             amenities=place_data.get("amenities", [])
         )
         self.place_repo.add(place)
@@ -174,7 +173,7 @@ class HBnBFacade:
 
     # - - - AMENITIES methods - - - 
     def create_amenity(self, amenity_data):
-        # Placeholder for logic to create an amenity
+        """Placeholder for logic to create an amenity"""
         amenity = Amenity(**amenity_data)
         self.amenity_repo.add(amenity)
         return amenity
@@ -188,7 +187,7 @@ class HBnBFacade:
         return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
-        # Placeholder for logic to retrieve all amenities
+        """Placeholder for logic to retrieve all amenities"""
         return self.amenity_repo.get_all()
     
     def update_amenity(self, amenity_id, amenity_data):
@@ -211,22 +210,23 @@ class HBnBFacade:
   
 
     # - - - REVIEW methods - - -
-    
-    # Methods for Review
+
     def create_review(self, review_data):
         """Create new review after validation"""
         user = self.user_repo.get(review_data['user_id'])
         place = self.place_repo.get(review_data['place_id'])
+        owner_id = self.place_repo.get(place)
+        if owner_id == user:
+            raise ValueError("You can't review your own place!!")
         if not user or not place:
             raise ValueError("Invalid user_id or place_id")
-        if not (1 <= review_data['rating'] <= 5):
+        if not 1 <= review_data['rating'] <= 5:
             raise ValueError("Rating must be between 1 and 5")
         review = Review(
-            id=str(uuid4()),
             text=review_data['text'],
             rating=review_data['rating'],
-            user_id=review_data['user_id'],
-            place_id=review_data['place_id']
+            user=review_data['user_id'],
+            place=review_data['place_id']
         )
         self.review_repo.add(review)
         return review

@@ -39,7 +39,7 @@ class PlaceList(Resource):
         place_data = request.get_json()
         try:
             new_place = facade.create_place(place_data)
-            return new_place, 201
+            return new_place.to_dict(), 201
         except ValueError as e:
             return {"ERROR": str(e)}, 400
 
@@ -86,22 +86,11 @@ class PlaceResource(Resource):
 #     'user_id': fields.String(description='ID of the user')
 # })
 
-# place_model = api.model('Place', {
-#     'title': fields.String(required=True, description='Title of the place'),
-#     'description': fields.String(description='Description of the place'),
-#     'price': fields.Float(required=True, description='Price per night'),
-#     'latitude': fields.Float(required=True, description='Latitude of the place'),
-#     'longitude': fields.Float(required=True, description='Longitude of the place'),
-#     'owner_id': fields.String(required=True, description='ID of the owner'),
-#     'owner': fields.Nested(user_model, description='Owner of the place'),
-#     'amenities': fields.List(fields.Nested(amenity_model), description='List of amenities'),
-#     'reviews': fields.List(fields.Nested(review_model), description='List of reviews')
-# })
-# =======
-#         place_data = request.get_json()
-#         try:
-#             response = facade.update_place(place_id, place_data)
-#             return response, 200
-#         except ValueError as e:
-#             return {"ERROR": str(e)}, 400
-# >>>>>>> main
+
+        place_data = request.get_json()
+        try:
+            response = facade.update_place(place_id, place_data)
+            return response, 200
+        except ValueError as e:
+            return {"ERROR": str(e)}, 400
+

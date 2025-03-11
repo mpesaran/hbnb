@@ -126,3 +126,16 @@ class Place(BaseModel):
         if self._owner:
             return self.owner.id
         return None
+
+    def to_dict(self):
+        place_dict = {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "price": self.price,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "owner": self.owner,
+            "amenities": self.amenities
+        }
+        return place_dict
