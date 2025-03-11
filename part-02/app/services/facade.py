@@ -49,23 +49,23 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Validates input and creates new place"""
         
-        if not place_data.get('title'):
-            return {"ERROR": "Title is required."}, 400
+        if place_data.get('title') is None:
+            raise TypeError("ERROR: Title must not be empty")
         
         if not isinstance(place_data.get('price'), (float, int)):
-            return {"ERROR": "Error: Price must be a number."}, 400
+            raise TypeError("ERROR: Price must be a non-negative number.")
         if place_data.get('price') < 0:
-            return {"ERROR": "Error: Price must be a non-negative number."}, 400
+            raise ValueError("ERROR: Price must be a non-negative number.")
 
         if not isinstance(place_data.get('longitude'), (float, int)):
-            return {"ERROR": "Error: Longitude must be a number."}, 400
+            raise TypeError("ERROR: Longitude must be a number")
         if not (-180 <= place_data.get('longitude') <= 180):
-            return {"ERROR": "Longitude must be between -180 and 180."}, 400
+            raise ValueError("ERROR: Longitude must be between -180 and 180")
         
-        if not isinstance(place_data.get('latitude'), (float, int)):
-            return {"ERROR": "Error: Latitude must be a number."}, 400
+        if not isinstance(place_data.get('latitude'), (int, float)):
+            raise TypeError("ERROR: Latitude must be a number")
         if not (-90 <= place_data.get('latitude') <= 90):
-            return {"ERROR": "Latitude must be between -90 and 90."}, 400
+            raise ValueError("ERROR: Latitude must be between -90 and 90")
         
         owner_found = self.get_user(place_data["owner"])
         if not owner_found:
@@ -87,13 +87,14 @@ class HBnBFacade:
     def get_place(self, place_id):
         """"Retrieve a place using ID, owner and amenities"""
         place = self.place_repo.get(place_id)
+        
         if place is None:
-            return {"ERROR": "Place not found"}, 404
+            return None
 
         owner = place.owner
         owner_data = None
         if owner is None:
-            return {"ERROR": "Owner not found"}, 404
+            return None
         
         owner_data = {
             "id": owner.id,
@@ -122,7 +123,7 @@ class HBnBFacade:
             "longitude": place.longitude,
             "owner": owner_data,
             "amenities": formatted_amenities
-        }
+        }, 200
 
 
     def get_all_places(self):
@@ -178,20 +179,35 @@ class HBnBFacade:
         return amenity
 
     def get_amenity(self, amenity_id):
-        """Placeholder for logic to retrieve an amenity by ID"""
+        # Placeholder for logic to retrieve an amenity by ID
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+          return None
+          
         return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
         """Placeholder for logic to retrieve all amenities"""
         return self.amenity_repo.get_all()
-
+    
     def update_amenity(self, amenity_id, amenity_data):
-        """Placeholder for logic to update an amenity"""
-        return self.amenity_repo.update(amenity_id, amenity_data)
+        # Placeholder for logic to update an amenity
+        amenity = self.get_amenity(amenity_id)
+        if not amenity:
+          return None 
 
+        all_amenities = self.get_all_amenities()
+        existing_amenity = any(a.name == amenity_data["name"] for a in all_amenities)
 
-
-
+        if 'name' in amenity_data and amenity_data['name'] != amenity.name:
+          if existing_amenity and existing_amenity.id != amenity_id:
+            raise ValueError("Amenity name already exists")
+        
+        self.amenity_repo.update(amenity_id, amenity_data)
+        return self.get_amenity(amenity_id)
+   
+  
+  
 
     # - - - REVIEW methods - - -
 

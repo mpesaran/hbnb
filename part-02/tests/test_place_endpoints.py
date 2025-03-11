@@ -48,7 +48,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
-        self.assertEqual(data["ERROR"], "Title is required.")
+        self.assertEqual(data["ERROR"], "ERROR: Title must not be empty.")
     
         
     def test_create_place_invalid_price(self):
@@ -63,7 +63,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
-        self.assertEqual(data["ERROR"], "Error: Price must be a non-negative number.")
+        self.assertEqual(data["ERROR"], "ERROR: Price must be a non-negative number.")
         
         
     def test_create_place_invalid_latitude(self):
@@ -78,7 +78,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
-        self.assertEqual(data["ERROR"], "Latitude must be between -90 and 90.")
+        self.assertEqual(data["ERROR"], "ERROR: Latitude must be between -90 and 90")
 
 
     def test_create_place_invalid_longitude(self):
@@ -93,7 +93,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
         data = response.get_json()
-        self.assertEqual(data["ERROR"], "Longitude must be between -180 and 180.")
+        self.assertEqual(data["ERROR"], "ERROR: Longitude must be between -180 and 180")
         
         
     # - - - TESTS: GET PLACE  (GET) - - -
@@ -159,7 +159,7 @@ class TestPlaceEndpoints(unittest.TestCase):
             "owner": "user123",
             "amenities": ["amenity1", "amenity2"]
         })
-        place_id = response.get_json()["id"]
+        place_id = response.get_json()["id"] # maybe convert to integer 
         
 
         response = self.client.put(f'/api/v1/places/{place_id}', json={

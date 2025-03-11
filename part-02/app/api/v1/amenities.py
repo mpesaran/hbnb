@@ -8,6 +8,13 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity'),
 })
 
+def validate_amenity(self):
+    if not isinstance(self['name'], str) or not self['name'].strip():
+        raise ValueError("Amenity name must be a non-empty string")
+    
+    self['name'] = self['name'].strip()
+    return self
+
 @api.route('/')
 class AmenityList(Resource):
     @api.expect(amenity_model)
@@ -22,9 +29,14 @@ class AmenityList(Resource):
 
         if existing_amenity:
             return {'error': 'Amenity already exists'}, 400
+        
+        try:
+            amenity_validated = validate_amenity(amenity_data)
+            new_amenity = facade.create_amenity(amenity_validated)
 
-        new_amenity = facade.create_amenity(amenity_data)
-        return {'id': new_amenity.id, 'name': new_amenity.name}, 201
+            return {'id': new_amenity.id, 'name': new_amenity.name}, 201
+        except ValueError as e:
+            return {"error": str(e)}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
     def get(self):
@@ -44,7 +56,7 @@ class AmenityResource(Resource):
         amenity = facade.get_amenity(amenity_id)
         # Placeholder for the logic to retrieve an amenity by ID
         if not amenity:
-            return {'error': 'Amenitiy not found'}, 404
+            return {'error': 'Amenity not found'}, 404
         return {'id': amenity.id, 'name': amenity.name}, 200
 
     @api.expect(amenity_model)
@@ -58,12 +70,15 @@ class AmenityResource(Resource):
         if not amenity_data:
             return {'error': 'Invalid input data'}, 400
         
-        amenity_exists = facade.get_amenity(amenity_id)
-        if not amenity_exists:
-            return {'error': 'Amenity not found'}, 404
-        
         try:
-            facade.update_amenity(amenity_id, amenity_data)
-            return {"message": "Amenity updated successfully"}, 200 
-        except ValueError as e:
+            updated_amenity = facade.update_amenity(amenity_id, amenity_data)
+
+            if not updated_amenity:
+                return {'error': 'Amenity not found'}, 404
+
+            return {
+              "id": updated_amenity.id,
+              "name": updated_amenity.name
+            }, 200     
+        except ValueError:
             return {"error": "Failed to update amenity"}, 500 
