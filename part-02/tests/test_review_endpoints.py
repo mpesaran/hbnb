@@ -32,10 +32,33 @@ class TestReviewEndpoints(unittest.TestCase):
         response = self.client.get('/api/v1/reviews/')
         self.assertEqual(response.status_code, 200)
 
-    def test_get_reviews_not_found(self):
+    def test_get_review_not_found(self):
         """Test retrieving non-existent review"""
         response = self.client.get('/api/v1/reviews/invalid-id')
         self.assertEqual(response.status_code, 404)
+
+    def test_update_review(self):
+        """Test updating an existing review"""
+        review_id = "2fa85f64-5717-4562-b3fc-2c963f66afa6"
+        response = self.client.put(f'/api/v1/reviews/{review_id}', json={
+            "text": "Updated review",
+            "rating": 4
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_review_not_found(self):
+        """Test updating a non-existent review"""
+        response = self.client.put('/api/v1/reviews/invalid-id', json={
+            "text": "Good experience!",
+            "rating": 5
+        })
+        self.assertEqual(response.status_code, 404)
+
+    def test_delete_review(self):
+        """Test deleting an existing review"""
+        review_id = "2fa85f64-5717-4562-b3fc-2c963f66afa6"
+        response = self.client.delete(f'/api/v1/reviews/{review_id}')
+        self.assertEqual(response.status_code, 200)
 
     def test_delete_review_not_found(self):
         """Test deleting non-existent review"""
