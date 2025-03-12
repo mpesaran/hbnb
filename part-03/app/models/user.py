@@ -3,6 +3,10 @@
 import uuid
 import re
 from datetime import datetime
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
+
 
 class User:
     """ User class """
@@ -19,7 +23,7 @@ class User:
     # places = []
     # reviews = []
 
-    def __init__(self, first_name, last_name, email, is_admin = False):
+    def __init__(self, first_name, last_name, email, password, is_admin = False):
         # NOTE: Attributes that don't already exist will be
         # created when called in the constructor
 
@@ -32,12 +36,33 @@ class User:
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.password = password
         self.is_admin = is_admin
         self.places = [] # List to store user-owned places
         self.reviews = [] # List to store user-written reviews
+        
+        # hashing password upon user instantiation
+        self.hash_password(password)
+
+
+    def hash_password(self, password):
+        """Hashes the password before storing it."""
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def verify_password(self, password):
+        """Verifies if the provided password matches the hashed password."""
+        return bcrypt.check_password_hash(self.password, password)
+
 
     # --- Getters and Setters ---
     # Setters are actually called when values are assigned in the constructor!
+    @property
+    def password(self):
+        return self._password
+    
+    @password.setter
+    def password(self, value):
+        self._password = value
 
     @property
     def first_name(self):
