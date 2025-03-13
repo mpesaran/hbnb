@@ -1,3 +1,8 @@
+from app import db
+from app.models.user import User
+from app.models.amenity import Amenity
+from app.models.place import Place
+from app.models.review import Review
 from abc import ABC, abstractmethod
 
 class Repository(ABC):
@@ -26,33 +31,32 @@ class Repository(ABC):
         pass
 
 
-class InMemoryRepository(Repository):
-    def __init__(self):
-        self._storage = {}
+class SQLAlchemyRepository(Repository):
+    def __init__(self, model):
+        self.model = model
 
     def add(self, obj):
-        self._storage[obj.id] = obj
+        db.session.add(obj)
+        db.session.commit()
 
     def get(self, obj_id):
-        return self._storage.get(obj_id)
+        return self.model.query.get(obj_id)
 
     def get_all(self):
-        return list(self._storage.values())
+        return self.model.query.all()
 
     def update(self, obj_id, data):
         obj = self.get(obj_id)
         if obj:
-            # We can't use the update method because obj is a User object and not a dict
-            # obj.update(data)
-
-            # let's do it the old fashioned way
-            for key in data:
-                setattr(obj, key, data[key])
-
+            for key, value in data.items():
+                setattr(obj, key, value)
+            db.session.commit()
 
     def delete(self, obj_id):
-        if obj_id in self._storage:
-            del self._storage[obj_id]
+        obj = self.get(obj_id)
+        if obj:
+            db.session.delete(obj)
+            db.session.commit()
 
     def get_by_attribute(self, attr_name, attr_value):
-        return next((obj for obj in self._storage.values() if getattr(obj, attr_name) == attr_value), None)
+        return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
