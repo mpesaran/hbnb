@@ -1,7 +1,14 @@
 import uuid
+from app import db
 from datetime import datetime
 
-class Review:
+class Review(db.Model):
+    """Review Class"""
+    __tablename__ = 'reviews'
+
+    text = db.Column(db.String(512), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+
     def __init__(self, text, rating, place_id, user_id):
         if text is None or rating is None or place_id is None or user_id is None:
             raise ValueError("Required attributes not specified!")
