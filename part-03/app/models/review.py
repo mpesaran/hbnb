@@ -6,7 +6,7 @@ class Review(db.Model):
     """Review Class"""
     __tablename__ = 'reviews'
 
-    text = db.Column(db.String(512), nullable=False)
+    text = db.Column(db.String(1024), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
     def __init__(self, text, rating, place_id, user_id):
