@@ -1,10 +1,14 @@
 venv
-app/__pycache__/__init__.cpython-38.pyc
-__pycache__/
+
 **pytest_cache
 **.pyc
 **.pyc
 **.pyo
 **/__pycache__/
 ./tests/__pycache__
-**__pycache__
+part-03/app/__pycache__
+part-03/app/api/__pycache__
+part-03/app/models/__pycache__
+part-03/app/persistence/__pycache__
+part-03/app/services/__pycache__
+
