@@ -2,10 +2,14 @@ import uuid
 from app import db
 from datetime import datetime
 
+
 class Review(db.Model):
     """Review Class"""
     __tablename__ = 'reviews'
 
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
     text = db.Column(db.String(1024), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
