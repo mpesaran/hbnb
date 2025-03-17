@@ -1,7 +1,9 @@
 import uuid
 from app import db
 from datetime import datetime
+from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt()
 
 class Review(db.Model):
     """Review Class"""
