@@ -19,8 +19,8 @@ class Place(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
 
     def __init__(self, title, description, price, latitude, longitude, owner_id):
-        # if title is None or description is None or price is None or latitude is None or longitude is None or owner_id is None:
-        #     raise ValueError("Required attributes not specified!")
+        if title is None or description is None or price is None or latitude is None or longitude is None or owner_id is None:
+            raise ValueError("Required attributes not specified!")
 
         self.title = title
         self.description = description
