@@ -1,9 +1,7 @@
 import uuid
 from app import db
 from datetime import datetime
-from flask_bcrypt import Bcrypt
 
-bcrypt = Bcrypt()
 
 class Review(db.Model):
     """Review Class"""
@@ -12,7 +10,7 @@ class Review(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
-    text = db.Column(db.String(1024), nullable=False)
+    text = db.Column(db.String(500), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
     def __init__(self, text, rating, place_id, user_id):
