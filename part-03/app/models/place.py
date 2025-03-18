@@ -28,8 +28,7 @@ class Place(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.owner_id = owner_id
-        # self.reviews = []  # relationship - List to store related reviews
-        # self.amenities = []  # relationship - List to store related amenities
+
 
      # --- Validators ---
     @validates("title")
