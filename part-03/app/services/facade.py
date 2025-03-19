@@ -92,6 +92,9 @@ class HBnBFacade:
     def get_reviews_by_place(self, place_id):
         return self.review_repository.get_by_attribute('place_id', place_id)
 
+    def get_reviews_by_rating(self, rating):
+        return self.review_repository.get_reviews_by_rating(rating)
+
     def update_review(self, review_id, review_data):
         self.review_repository.update(review_id, review_data)
 
