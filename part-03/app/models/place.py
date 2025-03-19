@@ -1,115 +1,76 @@
 import uuid
 from datetime import datetime
 from app.models.user import User
+from app import db
+from sqlalchemy.orm import validates, relationship
 
-class Place:
-    def __init__(self, title, description, price, latitude, longitude, owner):
-        if title is None or description is None or price is None or latitude is None or longitude is None or owner is None:
+
+class Place(db.Model):
+    __tablename__ = "places"
+
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(300), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    owner_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now())
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
+    owner_r = relationship("User", back_populates="properties_r")
+
+    def __init__(self, title, description, price, latitude, longitude, owner_id):
+        if title is None or description is None or price is None or latitude is None or longitude is None or owner_id is None:
             raise ValueError("Required attributes not specified!")
 
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
         self.title = title
         self.description = description
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.owner = owner
-        self.reviews = []  # relationship - List to store related reviews
-        self.amenities = []  # relationship - List to store related amenities
+        self.owner_id = owner_id
 
-    # --- Getters and Setters ---
-    @property
-    def title(self):
-        """ Returns value of property title """
-        return self._title
 
-    @title.setter
-    def title(self, value):
-        """Setter for prop title"""
-        # ensure that the value is up to 100 alphabets only after removing excess white-space
-        is_valid_title = 0 < len(value.strip()) <= 100
-        if is_valid_title:
-            self._title = value.strip()
-        else:
-            raise ValueError("Invalid title length!")
-
-    @property
-    def description(self):
-        """ Returns value of property description """
-        return self._description
-
-    @description.setter
-    def description(self, value):
-        """Setter for prop description"""
-        # Can't think of any special checks to perform here tbh
-        self._description = value
-
-    @property
-    def price(self):
-        """ Returns value of property price """
-        return self._price
-
-    @price.setter
-    def price(self, value):
-        """Setter for prop price"""
-        if isinstance(value, float) and value > 0.0:
-            self._price = value
-        else:
+     # --- Validators ---
+    @validates("title")
+    def validate_title(self, key, value):
+        value = value.strip()
+        if not 1 <= len(value) <= 100:
+            raise ValueError("Title must be a non-empty string with max length 100.")
+        return value
+    
+    @validates("price")
+    def validate_price(self, key, value):
+        if not isinstance(value, (int, float)) or value <= 0:
             raise ValueError("Invalid value specified for price")
+        return float(value)
 
-    @property
-    def latitude(self):
-        """ Returns value of property latitude """
-        return self._latitude
+    @validates("latitude")
+    def validate_latitude(self, key, value):
+        if not isinstance(value, (int, float)) or not -90 <= value <= 90:
+            raise ValueError("Latitude must be between -90 and 90.")
+        return float(value)
+        
+    @validates("longitude")
+    def validate_longitude(self, key, value):
+        if not isinstance (value, (int, float)) or not -180 <= value <= 180:
+            raise ValueError("Longitude must be between -180 and 180.")
+        return float(value)
 
-    @latitude.setter
-    def latitude(self, value):
-        """Setter for prop latitude"""
-        if isinstance(value, float) and -90.0 <= value <= 90.0:
-            self._latitude = value
-        else:
-            raise ValueError("Invalid value specified for Latitude")
 
-    @property
-    def longitude(self):
-        """ Returns value of property longitude """
-        return self._longitude
-
-    @longitude.setter
-    def longitude(self, value):
-        """Setter for prop longitude"""
-        if isinstance(value, float) and -180.0 <= value <= 180.0:
-            self._longitude = value
-        else:
-            raise ValueError("Invalid value specified for Longitude")
-
-    @property
-    def owner(self):
-        """ Returns value of property owner """
-        return self._owner
-
-    @owner.setter
-    def owner(self, value):
-        """Setter for prop owner"""
-        if isinstance(value, User):
-            self._owner = value
-        else:
-            raise ValueError("Invalid object type passed in for owner!")
 
     # --- Methods ---
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
         self.updated_at = datetime.now()
 
-    def add_review(self, review):
-        """Add a review to the place."""
-        self.reviews.append(review)
+    # def add_review(self, review):
+    #     """Add a review to the place."""
+    #     self.reviews.append(review)
 
-    def add_amenity(self, amenity):
-        """Add an amenity to the place."""
-        self.amenities.append(amenity)
+    # def add_amenity(self, amenity):
+    #     """Add an amenity to the place."""
+    #     self.amenities.append(amenity)
 
     @staticmethod
     def place_exists(place_id):
