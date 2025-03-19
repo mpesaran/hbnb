@@ -23,6 +23,8 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
+    
+    properties_r = db.relationship('Place', backref='owner_r', cascade="all, delete")
 
     @validates("email")
     def validates_email(self, key, value):
@@ -60,82 +62,6 @@ class User(db.Model):
     def verify_password(self, password):
         """Verifies if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
-
-
-    # --- Getters and Setters ---
-    # Setters are actually called when values are assigned in the constructor!
-    # @property
-    # def password(self):
-    #     return self._password
-    
-    # @password.setter
-    # def password(self, value):
-    #     self._password = value
-
-    # @property
-    # def first_name(self):
-    #     """Getter for prop first_name"""
-    #     return self._first_name
-
-    # @first_name.setter
-    # def first_name(self, value):
-    #     """Setter for prop first_name"""
-    #     # ensure that the value is up to 50 alphabets only after removing excess white-space
-    #     is_valid_name = 0 < len(value.strip()) <= 50
-    #     if is_valid_name:
-    #         self._first_name = value.strip()
-    #     else:
-    #         raise ValueError("Invalid first_name length!")
-
-    # @property
-    # def last_name(self):
-    #     """Getter for prop last_name"""
-    #     return self._last_name
-
-    # @last_name.setter
-    # def last_name(self, value):
-    #     """Setter for prop last_name"""
-    #     # ensure that the value is up to 50 alphabets only after removing excess white-space
-    #     is_valid_name = 0 < len(value.strip()) <= 50
-    #     if is_valid_name:
-    #         self._last_name = value.strip()
-    #     else:
-    #         raise ValueError("Invalid last_name length!")
-
-    # @property
-    # def email(self):
-    #     """Getter for prop email"""
-    #     return self._email
-
-    # @email.setter
-    # def email(self, value):
-    #     """Setter for prop last_name"""
-    #     # calls the method in the facade object
-    #     from app.services import facade
-
-    #     # add a simple regex check for email format. Nothing too fancy.
-    #     is_valid_email = len(value.strip()) > 0 and re.search("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", value)
-    #     email_exists = facade.get_user_by_email(value.strip())
-    #     if is_valid_email and not email_exists:
-    #         self._email = value
-    #     else:
-    #         if email_exists:
-    #             raise ValueError("Email already exists!")
-
-    #         raise ValueError("Invalid email format!")
-
-    # @property
-    # def is_admin(self):
-    #     """Getter for prop is_admin"""
-    #     return self._is_admin
-
-    # @is_admin.setter
-    # def is_admin(self, value):
-    #     """Setter for prop is_admin"""
-    #     if isinstance(value, bool):
-    #         self._is_admin = value
-    #     else:
-    #         raise ValueError("Invalid is_admin value!")
 
 
     # --- Methods ---
