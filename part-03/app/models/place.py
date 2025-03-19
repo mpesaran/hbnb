@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from app.models.user import User
 from app import db
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates, relationship
 
 
 class Place(db.Model):
@@ -17,6 +17,7 @@ class Place(db.Model):
     owner_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
+    owner_r = relationship("User", back_populates="properties_r")
 
     def __init__(self, title, description, price, latitude, longitude, owner_id):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner_id is None:
