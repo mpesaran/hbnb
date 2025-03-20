@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from app import db
 from sqlalchemy.orm import validates
-
+from app.models.associations import place_amenity
 
 class Amenity(db.Model):
     """ Amenity class """
@@ -14,6 +14,7 @@ class Amenity(db.Model):
     name = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
+    place_r = db.relationship("Place", secondary=place_amenity, back_populates="amenities_r")
 
     @validates("name")
     def validates_name(self, key, value):

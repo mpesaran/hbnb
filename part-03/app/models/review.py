@@ -1,6 +1,7 @@
 import uuid
 from app import db
 from datetime import datetime
+from sqlalchemy.orm import validates
 
 
 class Review(db.Model):
@@ -12,6 +13,11 @@ class Review(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
     text = db.Column(db.String(500), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
+
+    user_r = db.relationship('User', back_populates="reviews_r")
+    place_r = db.relationship('Place', back_populates="reviews_r")
 
     def __init__(self, text, rating, place_id, user_id):
         if text is None or rating is None or place_id is None or user_id is None:
@@ -22,67 +28,42 @@ class Review(db.Model):
         self.updated_at = datetime.now()
         self.text = text
         self.rating = rating
-        self.place_id = place_id # relationship - id of Place that the Review is for
-        self.user_id = user_id # relationship - id of User who wrote the Review
+        self.place_id = place_id
+        self.user_id = user_id
 
-    # --- Getters and Setters ---
-    @property
-    def text(self):
-        """ Returns value of property text """
-        return self._text
+    # --- Validators ---
+    @validates('text')
+    def validate_text(self, key, value):
+        """Ensure text is provided"""
+        if not value:
+            raise ValueError("Text is required for review")
+        return value
 
-    @text.setter
-    def text(self, value):
-        """Setter for prop text"""
-        # Can't think of any special checks to perform here tbh
-        self._text = value
+    @validates('rating')
+    def validate_rating(self, key, value):
+        """Ensure rating is between 1 and 5"""
+        if not (1 <= value <= 5):
+            raise ValueError("Rating must be an integer between 1 and 5")
+        return value
 
-    @property
-    def rating(self):
-        """ Returns value of property rating """
-        return self._rating
-
-    @rating.setter
-    def rating(self, value):
-        """Setter for prop rating"""
-        if isinstance(value, int) and 1 <= value <= 5:
-            self._rating = value
-        else:
-            raise ValueError("Invalid value specified for rating")
-
-    @property
-    def user_id(self):
-        """ Returns value of property user_id """
-        return self._user_id
-
-    @user_id.setter
-    def user_id(self, value):
-        """Setter for prop user_id"""
-        # calls the method in the facade object
+    @validates('user_id')
+    def validate_user_id(self, key, value):
+        """Validate if the user exists"""
         from app.services import facade
-
         user_exists = facade.get_user(value)
-        if user_exists:
-            self._user_id = value
-        else:
-            raise ValueError("Owner does not exist!")
+        if not user_exists:
+            raise ValueError("User does not exist!")
+        return value
 
-    @property
-    def place_id(self):
-        """ Returns value of property place_id """
-        return self._place_id
-
-    @place_id.setter
-    def place_id(self, value):
-        """Setter for prop place_id"""
-        # calls the method in the facade object
+    @validates('place_id')
+    def validate_place_id(self, key, value):
+        """Validate if the place exists"""
         from app.services import facade
-
         place_exists = facade.get_place(value)
-        if place_exists:
-            self._place_id = value
-        else:
+        if not place_exists:
             raise ValueError("Place does not exist!")
+        return value
+    
 
     # --- Methods ---
     def save(self):

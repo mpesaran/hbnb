@@ -39,7 +39,7 @@ class ReviewList(Resource):
             return { 'error': "Invalid input data - place does not exist" }, 400
 
         # make sure review writer is not place owner
-        if place.owner.id == user.id:
+        if place.owner_id == user.id:
             return { 'error': "Invalid input data - review writer is place owner" }, 400
 
         # finally, create the review

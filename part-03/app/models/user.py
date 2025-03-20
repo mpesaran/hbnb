@@ -24,7 +24,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
     
-    properties_r = db.relationship('Place', backref='owner_r', cascade="all, delete")
+    properties_r = db.relationship('Place', back_populates='owner_r', cascade="all, delete")
+    reviews_r = db.relationship('Review', back_populates="user_r", cascade="all, delete")
 
     @validates("email")
     def validates_email(self, key, value):
