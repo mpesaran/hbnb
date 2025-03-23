@@ -166,5 +166,54 @@ class PlaceResource(Resource):
                 return { 'error': "Setter validation failure: {}".format(error) }, 400
 
             return {'message': 'Place updated successfully'}, 200
-
         return {'error': 'Place not found'}, 404
+    
+    @api.response(200, 'Place deleted successfully')
+    @api.response(404, 'Place not found')
+    def delete(self, place_id):
+        """Delete a specific place by ID."""
+        place = facade.get_place(place_id)
+        if not place:
+            return {"message": "Place not found"}, 404
+        
+        facade.delete_place(place_id)
+        return {"message": "Place deleted successfully"}, 200
+
+        
+
+@api.route('/<place_id>/amenities')
+class PlaceAmenity(Resource):
+    """
+    Resource class for managing amenities linked to a place.
+    """
+    @api.response(200, 'List of amenities for the place retrieved successfully')
+    @api.response(404, 'Place not found')
+    def get(self, place_id):
+        """Get all amenities related to a specific place."""
+        place = facade.get_place(place_id)
+        if not place:
+            return {"message": "Place not found"}, 404
+        return {
+            'place_id': place_id,
+            'amenities': [{'id': a.id, 'name': a.name} for a in place.amenities_r]
+        }, 200
+
+    @api.expect(place_model)
+    @api.response(200, 'Amenity added to place successfully')
+    @api.response(404, 'Place or amenity not found')
+    def post(self, place_id):
+        """Add an amenity to a specific place"""
+        data = api.payload
+        amenity_id = data.get('amenity_id')
+
+        if not amenity_id:
+            return {'message': "Amenit ID is required"}, 400
+
+        try:
+            facade.add_amenity_to_place(place_id, amenity_id)
+            return {"message": "Amenity added to place successfully"}, 200
+        except ValueError as e:
+            return {"message": str(e)}, 404
+        except AttributeError as e:
+            return {"message": str(e)}, 500
+

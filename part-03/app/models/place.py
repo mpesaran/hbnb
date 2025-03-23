@@ -2,8 +2,8 @@ import uuid
 from datetime import datetime
 from app.models.user import User
 from app import db
-from sqlalchemy.orm import validates, relationship
-
+from sqlalchemy.orm import validates
+from app.models.associations import place_amenity
 
 class Place(db.Model):
     __tablename__ = "places"
@@ -17,7 +17,9 @@ class Place(db.Model):
     owner_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
-    owner_r = relationship("User", back_populates="properties_r")
+    owner_r = db.relationship("User", back_populates="properties_r")
+    reviews_r = db.relationship("Review", back_populates="place_r", lazy=True, cascade="all, delete-orphan")
+    amenities_r = db.relationship("Amenity", secondary=place_amenity, lazy='subquery', back_populates="place_r")
 
     def __init__(self, title, description, price, latitude, longitude, owner_id):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner_id is None:
@@ -30,6 +32,8 @@ class Place(db.Model):
         self.longitude = longitude
         self.owner_id = owner_id
 
+        # self.amenities = []
+        # self.reviews = []
 
      # --- Validators ---
     @validates("title")
@@ -68,9 +72,11 @@ class Place(db.Model):
     #     """Add a review to the place."""
     #     self.reviews.append(review)
 
-    # def add_amenity(self, amenity):
-    #     """Add an amenity to the place."""
-    #     self.amenities.append(amenity)
+    def add_amenity(self, amenity):
+        """Add an amenity to the place."""
+        if amenity not in self.amenities_r:
+            self.amenities_r.append(amenity)
+            db.session.commit()
 
     @staticmethod
     def place_exists(place_id):
