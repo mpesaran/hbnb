@@ -128,24 +128,38 @@ class PlaceReviewList(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get all reviews for a specific place"""
-        # I'm going to do this the worst possible way:
-        # 1. grab all the reviews records (lol)
-        # 2. iterate them all through a loop while searching for the place_id
-        # 3. save the ones with the place_id in an array
-        # 4. print it out
 
-        all_reviews = facade.get_all_reviews()
-        output = []
+        reviews = facade.get_reviews_by_place(place_id)
+        if reviews:
+            return {'error': "Place not found"}, 404
 
-        for review in all_reviews:
-            if review.place_id == place_id:
-                output.append({
-                    'id': str(review.id),
-                    'text': review.text,
-                    'rating': review.rating
-                })
+        return reviews, 200
+    
+    @api.expect(review_model)
+    @api.response(201, 'Review for place created successfully')
+    @api.response(404, 'Place not found')
+    @api.response(400, 'Invalid input data')
+    def post(self, place_id):
+        """
+        Add a review to a specific place"
+        """
+        place = facade.get_place(place_id)
+        if not place:
+            return {'message': 'Place not found'}
 
-        if len(output) == 0:
-            return { 'error': "Place not found" }, 400
+        review_data = api.payload
+        review_data['place_id'] = place_id
 
-        return output, 200
+        try:
+            new_review = facade.create_review(review_data)
+            return {
+                'id': new_review.id,
+                'text': new_review.text,
+                'rating': new_review.rating,
+                'user_id': new_review.user.id,
+                'place_id': place_id,
+                'created_at': new_review.created_at,
+                'updated_at': new_review.updated_at
+            }, 201
+        except ValueError as e:
+            return {"error": str(e)}, 404

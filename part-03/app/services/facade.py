@@ -100,3 +100,22 @@ class HBnBFacade:
 
     def delete_review(self, review_id):
         self.review_repository.delete(review_id)
+
+    # --- Place and Amenity ---
+    def add_amenity_to_place(self, place_id, amenity_id):
+        place = self.get_place(place_id)
+        amenity = self.amenity_repository.get(amenity_id)
+        if not place:
+            raise ValueError("Place not found")
+        if not amenity:
+            raise ValueError("Amenity not found")
+        
+        place.add_amenity(amenity)
+
+
+    # # --- Place and Review ---
+    # def get_review_by_place(self, place_id):
+    #     place = self.get_place(place_id)
+    #     if not place:
+    #         raise ValueError("Place not found")
+    #     return place.reviews_r

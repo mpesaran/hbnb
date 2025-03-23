@@ -18,8 +18,8 @@ class Place(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now())
     owner_r = db.relationship("User", back_populates="properties_r")
-    reviews_r = db.relationship("Review", back_populates="place_r")
-    amenities_r = db.relationship("Amenity", secondary=place_amenity, back_populates="place_r")
+    reviews_r = db.relationship("Review", back_populates="place_r", lazy=True, cascade="all, delete-orphan")
+    amenities_r = db.relationship("Amenity", secondary=place_amenity, lazy='subquery', back_populates="place_r")
 
     def __init__(self, title, description, price, latitude, longitude, owner_id):
         if title is None or description is None or price is None or latitude is None or longitude is None or owner_id is None:
