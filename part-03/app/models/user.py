@@ -27,14 +27,6 @@ class User(db.Model):
     properties_r = db.relationship('Place', back_populates='owner_r', cascade="all, delete")
     reviews_r = db.relationship('Review', back_populates="user_r", cascade="all, delete")
 
-    @validates("email")
-    def validates_email(self, key, value):
-        """validate email format before saving."""
-        if not re.search("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", value):
-            raise ValueError("Invalid email format!")
-        return value.strip()
-
-    
 
     def __init__(self, first_name, last_name, email, password, is_admin = False):
         # NOTE: Attributes that don't already exist will be
@@ -52,9 +44,15 @@ class User(db.Model):
         self.hash_password(password)
         self.is_admin = is_admin
 
-        self.places = [] # List to store user-owned places
-        self.reviews = [] # List to store user-written reviews 
+        # self.places = [] # List to store user-owned places
+        # self.reviews = [] # List to store user-written reviews 
 
+    @validates("email")
+    def validates_email(self, key, value):
+        """validate email format before saving."""
+        if not re.search("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", value):
+            raise ValueError("Invalid email format!")
+        return value.strip()
 
     def hash_password(self, password):
         """Hashes the password before storing it."""
@@ -77,6 +75,12 @@ class User(db.Model):
     def add_review(self, review):
         """Add a review to the user."""
         self.reviews.append(review)
+
+    # def delete(self, user_id):
+    #     user = self.get(user_id)
+    #     if user:
+    #         db.session.delete(user)
+    #         db.session.commit()
 
     @staticmethod
     def email_exists(email):

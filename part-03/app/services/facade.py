@@ -37,6 +37,11 @@ class HBnBFacade:
     def update_user(self, user_id, user_data):
         self.user_repo.update(user_id, user_data)
 
+    def delete_user(self, user_id):
+        user = self.user_repo.get(user_id)
+        if not user:
+            raise ValueError("User not found")
+        self.user_repo.delete(user_id)
 
     # --- Amenities ---
     # Used during record insertion to prevent duplicate amenities
@@ -76,6 +81,8 @@ class HBnBFacade:
             raise ValueError("Place not found")
         self.place_repo.update(place_id, place_data)
 
+    def delete_place(self, place_id):
+        return self.place_repo.delete(place_id)
 
     # --- Reviews ---
     def create_review(self, review_data):

@@ -166,8 +166,20 @@ class PlaceResource(Resource):
                 return { 'error': "Setter validation failure: {}".format(error) }, 400
 
             return {'message': 'Place updated successfully'}, 200
-
         return {'error': 'Place not found'}, 404
+    
+    @api.response(200, 'Place deleted successfully')
+    @api.response(404, 'Place not found')
+    def delete(self, place_id):
+        """Delete a specific place by ID."""
+        place = facade.get_place(place_id)
+        if not place:
+            return {"message": "Place not found"}, 404
+        
+        facade.delete_place(place_id)
+        return {"message": "Place deleted successfully"}, 200
+
+        
 
 @api.route('/<place_id>/amenities')
 class PlaceAmenity(Resource):
@@ -183,11 +195,12 @@ class PlaceAmenity(Resource):
             return {"message": "Place not found"}, 404
         return {
             'place_id': place_id,
-            'amenities': [{'id': a.id, 'name': a.name} for a in place.amenities]
+            'amenities': [{'id': a.id, 'name': a.name} for a in place.amenities_r]
         }, 200
+
+    @api.expect(place_model)
     @api.response(200, 'Amenity added to place successfully')
     @api.response(404, 'Place or amenity not found')
-    @api.response(403, 'Unauthorized action')
     def post(self, place_id):
         """Add an amenity to a specific place"""
         data = api.payload
@@ -204,4 +217,3 @@ class PlaceAmenity(Resource):
         except AttributeError as e:
             return {"message": str(e)}, 500
 
-        

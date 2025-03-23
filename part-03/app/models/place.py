@@ -32,6 +32,8 @@ class Place(db.Model):
         self.longitude = longitude
         self.owner_id = owner_id
 
+        # self.amenities = []
+        # self.reviews = []
 
      # --- Validators ---
     @validates("title")
