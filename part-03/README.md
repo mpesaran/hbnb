@@ -52,11 +52,12 @@ Relationships between the `User`, `Place`, `Review` and `Amentiy` classes reflec
 ![ER Diagram](https://github.com/mpesaran/hbnb/blob/6008810a94ee006ac6dbb77c4e3d9b7a3d6cb762/part-03/ERD%20holberton%20part%203.png)
 
 ### **One-to-Many**
-- **User and Place** : A `User` can create many `Places`, but each `Place` is associated with only one `User`.
-- **Place and Review** : A `Place` can have many `Reviews`, but each `Review` is associated with only one `Place`.
-- **User and Review** : A `User` can create many `Reviews`, but each `Review` is written by one `User`.
+- 👥🏘️ **User and Place** : A `User` can create many `Places`, but each `Place` is associated with only one `User`.
+- 🏘️🗒️ **Place and Review** : A `Place` can have many `Reviews`, but each `Review` is associated with only one `Place`.
+- 👥🗒️ **User and Review** : A `User` can create many `Reviews`, but each `Review` is written by one `User`.
 
-- **Many-to-Many** : A `Place` can have many `Amenities`, and an `Amenity` can be associated with many `Places`.
+### **Many-to-Many** 
+- 🏘️🚽 **Place and Amenities** : A `Place` can have many `Amenities`, and an `Amenity` can be associated with many `Places`.
 
 ## 🖥️  Installation  🖥️
 
