@@ -47,9 +47,9 @@ hbnb is a web application that replicates the functionality of Airbnb, allowing 
 - **README.md**: This file contains a brief overview of the project and instructions.
 
 ## Relationships
-![ER Diagram](https://github.com/mpesaran/hbnb/blob/6008810a94ee006ac6dbb77c4e3d9b7a3d6cb762/part-03/ERD%20holberton%20part%203.png))
+Relationships between the `User`, `Place`, `Review` and `Amentiy` classes reflect the connections between the real-world concepts represented by each entity.
 
-Relationships between the User, Place, Review and Amentiy classes reflect the connections between the real-world concepts represented by each entity.
+![ER Diagram](https://github.com/mpesaran/hbnb/blob/6008810a94ee006ac6dbb77c4e3d9b7a3d6cb762/part-03/ERD%20holberton%20part%203.png)
 
 ### ** One-to-Many **
 - ** User and Place ** : A `User` can create many `Places`, but each `Place` is associated with only one `User`.
