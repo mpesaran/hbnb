@@ -17,7 +17,6 @@
         </nav>
     </header>
     <main>
-        <h1>Available Places</h1>
         <section id="filter">
             <label for="price-filter">Max Price:</label>
             <select id="price-filter">
@@ -25,7 +24,12 @@
             </select>
         </section>
         <section id="places-list">
-            <!-- List of places will be populated dynamically -->
+            <div class="place-card">
+                <h3>Charming Loft</h3>
+                <p>$120/night</p>
+                <button class="details-button" onclick="location.href='place.html?id=1'">View Details</button>
+            </div>
+            <!-- Repeat for other places -->
         </section>
     </main>
     <footer>
