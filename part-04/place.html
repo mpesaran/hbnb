@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place Details</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HBnB - Place Details</title>
+  <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+  <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
-    <header>
-        <img src="images/logo.png" alt="HBnB Logo" class="logo">
-        <nav>
-            <a href="index.html" id="places-list">Home</a>
-            <a href="add_review.html" id="add-review">Reviews</a>
-            <a href="login.html" class="login-button">Login</a>
-        </nav>
-    </header>
-    <main>
-        <section id="place-details">
-            <!-- Place details will be populated dynamically -->
-        </section>
-        <section id="reviews">
-            <!-- Reviews will be populated dynamically -->
-        </section>
-        <section id="add-review">
-            <h2>Add a Review</h2>
-            <form id="review-form">
-                <label for="review-text">Review:</label>
-                <textarea id="review-text" name="review-text" required></textarea>
-                
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-    </main>
-    <footer>
-        All rights reserved &copy; 2025
-    </footer>
-    <script src="scripts.js"></script>
+  <header class="header-container">
+    <div class="logo">
+      <img src="assets/logo.png" alt="HBnB Logo" class="logo">
+    </div>
+    <nav>
+      <a href="index.html" id="places-list">Home</a>
+      <a href="add_review.html" id="reviewForm">Reviews</a>
+      <a href="login.html" id="login-link" class="login-button">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="place-details">
+      <h2 class="place-title">Place Name</h2>
+      <div class="place-info">
+        <p><strong>Location:</strong> Sample City, State</p>
+        <p><strong>Price:</strong> $150/night</p>
+        <p><strong>Description:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p><strong>Amenities:</strong> Wi-Fi, Air Conditioning, Pool</p>
+      </div>
+    </section>
+
+    <section id="review-section">
+      <h3>Reviews</h3>
+      <ul id="reviewList" class="review-list">
+        <li class="review-card"><strong>Jane:</strong> Amazing place! 5 stars.</li>
+        <li class="review-card"><strong>Tom:</strong> Cozy and clean, would stay again.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>All rights reserved &copy; 2025</p>
+  </footer>
+
+  <script src="scripts/scripts.js"></script>
 </body>
 </html>

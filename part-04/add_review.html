@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Review</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HBnB - Add Review</title>
+  <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+  <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
-    <header>
-        <img src="images/logo.png" alt="HBnB Logo" class="logo">
-        <nav>
-            <a href="index.html" id="places-list">Home</a>
-            <a href="place.html" id="place-details">Place Details</a>
-            <a href="login.html" class="login-button">Login</a>
-        </nav>
-    </header>
-    <main>
-        <h3>Review for: [PLACE NAME]</h3>
-        <form id="review-form">
-            <h2>Add a Review</h2>
-            <label for="review">Your Review:</label>
-            <textarea id="review" name="review" required></textarea>
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" required>
-                <option value="">Select rating</option>
-                <option value="1">1 - ★☆☆☆☆</option>
-                <option value="2">2 - ★★☆☆☆</option>
-                <option value="3">3 - ★★★☆☆</option>
-                <option value="4">4 - ★★★★☆</option>
-                <option value="5">5 - ★★★★★</option>
-            </select>
-            <button type="submit">Submit Review</button>
-        </form>
-    </main>
-    <footer>
-        All rights reserved &copy; 2025
-    </footer>
-    <script src="scripts.js"></script>
+  <header class="header-container">
+    <div class="logo">
+      <img src="assets/logo.png" alt="HBnB Logo" class="logo">
+    </div>
+    <nav>
+      <a href="index.html" id="places-list">Home</a>
+      <a href="place.html" id="place-detail">Places</a>
+      <a href="login.html" id="login-link" class="login-button">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="review-form-section">
+      <h2>Add a Review</h2>
+      <form id="reviewForm" class="review-form">
+        <input type="text" id="reviewerName" placeholder="Your name" required />
+        <textarea id="reviewText" placeholder="Write your review..." required></textarea>
+        <select id="rating" required>
+          <option value="">Rating</option>
+          <option value="5">5 - Excellent</option>
+          <option value="4">4 - Very Good</option>
+          <option value="3">3 - Good</option>
+          <option value="2">2 - Fair</option>
+          <option value="1">1 - Poor</option>
+        </select>
+        <button type="submit">Submit Review</button>
+      </form>
+      <p id="reviewMsg" style="margin-top: 1rem;"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>All rights reserved &copy; 2025</p>
+  </footer>
+
+  <script src="scripts/scripts.js"></script>
 </body>
 </html>
